@@ -1,0 +1,35 @@
+services:
+  # 1. Backend Web Service (FastAPI)
+  - type: web
+    name: marketmind-api
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    rootDir: backend
+    plan: free
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: marketmind-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+
+  # 2. Frontend Web Service (Next.js Node App)
+  - type: web
+    name: marketmind-frontend
+    env: node
+    buildCommand: npm run build
+    startCommand: npm start
+    rootDir: frontend
+    plan: free
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        value: https://marketmind-api.onrender.com
+      - key: NODE_VERSION
+        value: 20
+
+databases:
+  # 3. PostgreSQL Database
+  - name: marketmind-db
+    plan: free
