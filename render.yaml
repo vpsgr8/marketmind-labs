@@ -19,7 +19,7 @@ services:
   - type: web
     name: marketmind-frontend
     env: node
-    buildCommand: npm run build
+    buildCommand: npm install && npm run build
     startCommand: npm start
     rootDir: frontend
     plan: free
