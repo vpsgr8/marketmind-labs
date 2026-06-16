@@ -2,18 +2,62 @@
 
 Probability and market structure analysis platform for Indian traders (NIFTY, BANKNIFTY, SENSEX).
 
-## Live URLs (Render)
+## Live URLs
 
-| Service | URL |
-|---------|-----|
-| **Frontend** | https://marketmind-frontend.onrender.com |
-| **Backend API** | https://marketmind-api.onrender.com |
-| **API Docs** | https://marketmind-api.onrender.com/docs |
-| **Health Check** | https://marketmind-api.onrender.com/api/health |
-| **Render Blueprint** | `exs-d8l494mgvqtc73ahtbhg` |
-| **Render Dashboard** | https://dashboard.render.com/blueprint/exs-d8l494mgvqtc73ahtbhg |
+| Service | Custom domain | Render fallback |
+|---------|---------------|-----------------|
+| **Frontend** | https://www.logictrade.site | https://marketmind-frontend.onrender.com |
+| **Backend API** | https://api.logictrade.site | https://marketmind-api.onrender.com |
+| **API Docs** | https://api.logictrade.site/docs | https://marketmind-api.onrender.com/docs |
+| **Health Check** | https://api.logictrade.site/api/health | https://marketmind-api.onrender.com/api/health |
+| **Render Blueprint** | `exs-d8l494mgvqtc73ahtbhg` | |
+| **Render Dashboard** | https://dashboard.render.com/blueprint/exs-d8l494mgvqtc73ahtbhg | |
 
 > **Note:** Free-tier Render services spin down after inactivity and may show as suspended until resumed from the dashboard.
+
+## Custom domain: logictrade.site (Namecheap)
+
+### 1. Render — add custom domains
+
+In the [Render dashboard](https://dashboard.render.com/blueprint/exs-d8l494mgvqtc73ahtbhg):
+
+**Frontend service (`marketmind-frontend`)** → Settings → Custom Domains → add:
+- `logictrade.site`
+- `www.logictrade.site`
+
+**Backend service (`marketmind-api`)** → Settings → Custom Domains → add:
+- `api.logictrade.site`
+
+Render will verify DNS and issue HTTPS automatically (usually 15–60 minutes).
+
+### 2. Namecheap — Advanced DNS
+
+Log in to Namecheap → Domain List → **logictrade.site** → **Manage** → **Advanced DNS**.
+
+Remove any conflicting `URL Redirect` or parking records for `@` and `www`, then add:
+
+| Type | Host | Value | TTL |
+|------|------|-------|-----|
+| **A Record** | `@` | `216.24.57.1` | Automatic |
+| **CNAME Record** | `www` | `marketmind-frontend.onrender.com` | Automatic |
+| **CNAME Record** | `api` | `marketmind-api.onrender.com` | Automatic |
+
+Use the exact CNAME targets Render shows in your dashboard if they differ from the table above.
+
+### 3. Verify
+
+After DNS propagates, test:
+
+- https://www.logictrade.site
+- https://logictrade.site
+- https://api.logictrade.site/api/health
+
+### 4. Optional — Google OAuth
+
+If using Google login, add these in [Google Cloud Console](https://console.cloud.google.com/) → Credentials → Authorized JavaScript origins:
+
+- `https://logictrade.site`
+- `https://www.logictrade.site`
 
 ## Project Structure
 
