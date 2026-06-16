@@ -22,7 +22,7 @@ services:
       - key: FRONTEND_URL
         value: https://www.logictrade.site
       - key: CORS_ORIGINS
-        value: https://logictrade.site,https://www.logictrade.site,https://marketmind-frontend.onrender.com
+        value: https://logictrade.site,https://www.logictrade.site,https://marketmind-frontend-s0zl.onrender.com
       - key: PYTHON_VERSION
         value: 3.11.8
 

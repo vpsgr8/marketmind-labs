@@ -21,5 +21,5 @@ print('✅ Database schema created/verified')
 "
 
 echo "✅ Deployment complete!"
-echo "🌐 Frontend: https://www.logictrade.site"
-echo "🔧 API: https://api.logictrade.site/api/health"
+echo "🌐 Frontend: https://www.logictrade.site (Render: marketmind-frontend-s0zl.onrender.com)"
+echo "🔧 API: https://api.logictrade.site/api/health (Render: marketmind-api-pdn0.onrender.com)"

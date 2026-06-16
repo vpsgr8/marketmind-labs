@@ -6,10 +6,10 @@ Probability and market structure analysis platform for Indian traders (NIFTY, BA
 
 | Service | Custom domain | Render fallback |
 |---------|---------------|-----------------|
-| **Frontend** | https://www.logictrade.site | https://marketmind-frontend.onrender.com |
-| **Backend API** | https://api.logictrade.site | https://marketmind-api.onrender.com |
-| **API Docs** | https://api.logictrade.site/docs | https://marketmind-api.onrender.com/docs |
-| **Health Check** | https://api.logictrade.site/api/health | https://marketmind-api.onrender.com/api/health |
+| **Frontend** | https://www.logictrade.site | https://marketmind-frontend-s0zl.onrender.com |
+| **Backend API** | https://api.logictrade.site | https://marketmind-api-pdn0.onrender.com |
+| **API Docs** | https://api.logictrade.site/docs | https://marketmind-api-pdn0.onrender.com/docs |
+| **Health Check** | https://api.logictrade.site/api/health | https://marketmind-api-pdn0.onrender.com/api/health |
 | **Render Blueprint** | `exs-d8l494mgvqtc73ahtbhg` | |
 | **Render Dashboard** | https://dashboard.render.com/blueprint/exs-d8l494mgvqtc73ahtbhg | |
 
@@ -21,11 +21,11 @@ Probability and market structure analysis platform for Indian traders (NIFTY, BA
 
 In the [Render dashboard](https://dashboard.render.com/blueprint/exs-d8l494mgvqtc73ahtbhg):
 
-**Frontend service (`marketmind-frontend`)** → Settings → Custom Domains → add:
+**Frontend service** (`marketmind-frontend` → `marketmind-frontend-s0zl.onrender.com`) → Settings → Custom Domains → add:
 - `logictrade.site`
 - `www.logictrade.site`
 
-**Backend service (`marketmind-api`)** → Settings → Custom Domains → add:
+**Backend service** (`marketmind-api` → `marketmind-api-pdn0.onrender.com`) → Settings → Custom Domains → add:
 - `api.logictrade.site`
 
 Render will verify DNS and issue HTTPS automatically (usually 15–60 minutes).
@@ -39,10 +39,12 @@ Remove any conflicting `URL Redirect` or parking records for `@` and `www`, then
 | Type | Host | Value | TTL |
 |------|------|-------|-----|
 | **A Record** | `@` | `216.24.57.1` | Automatic |
-| **CNAME Record** | `www` | `marketmind-frontend.onrender.com` | Automatic |
-| **CNAME Record** | `api` | `marketmind-api.onrender.com` | Automatic |
+| **CNAME Record** | `www` | `marketmind-frontend-s0zl.onrender.com` | Automatic |
+| **CNAME Record** | `api` | `marketmind-api-pdn0.onrender.com` | Automatic |
 
 Use the exact CNAME targets Render shows in your dashboard if they differ from the table above.
+
+> **Important:** If `api.logictrade.site` still points to the old `marketmind-api.onrender.com` hostname, calculators on the site will fail. Update the `api` CNAME to `marketmind-api-pdn0.onrender.com`. Until DNS propagates, set `NEXT_PUBLIC_API_URL=https://marketmind-api-pdn0.onrender.com` on the frontend service in Render and redeploy.
 
 ### 3. Verify
 

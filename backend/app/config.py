@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     DATABASE_URL: str = "sqlite:///./marketmind.db"
     SECRET_KEY: str = "change-this-to-a-secure-random-key-in-production"
     FRONTEND_URL: str = "http://localhost:3000"
-    CORS_ORIGINS: str = "http://localhost:3000,https://marketmind-frontend.onrender.com"
+    CORS_ORIGINS: str = "http://localhost:3000,https://logictrade.site,https://www.logictrade.site,https://marketmind-frontend-s0zl.onrender.com"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7
 
