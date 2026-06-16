@@ -1,5 +1,9 @@
+# MarketMind Labs — Render Blueprint
+# Blueprint ID: exs-d8l494mgvqtc73ahtbhg
+# Dashboard: https://dashboard.render.com/blueprint/exs-d8l494mgvqtc73ahtbhg
+
 services:
-  # 1. Backend Web Service (FastAPI)
+  # Backend API (FastAPI)
   - type: web
     name: marketmind-api
     env: python
@@ -7,6 +11,7 @@ services:
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     rootDir: backend
     plan: free
+    healthCheckPath: /api/health
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -14,10 +19,14 @@ services:
           property: connectionString
       - key: SECRET_KEY
         generateValue: true
+      - key: FRONTEND_URL
+        value: https://marketmind-frontend.onrender.com
+      - key: CORS_ORIGINS
+        value: https://marketmind-frontend.onrender.com
       - key: PYTHON_VERSION
         value: 3.11.8
 
-  # 2. Frontend Web Service (Next.js Node App)
+  # Frontend (Next.js)
   - type: web
     name: marketmind-frontend
     env: node
@@ -32,6 +41,5 @@ services:
         value: 20
 
 databases:
-  # 3. PostgreSQL Database
   - name: marketmind-db
     plan: free

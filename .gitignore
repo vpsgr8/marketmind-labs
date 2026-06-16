@@ -10,4 +10,6 @@ dist/
 build/
 .env
 *.log
-.DS_Store
+# Local / CI
+test_marketmind.db
+marketmind.db

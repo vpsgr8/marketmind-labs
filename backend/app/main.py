@@ -25,7 +25,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=settings.cors_origin_list,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -48,6 +48,18 @@ def on_startup():
     Base.metadata.create_all(bind=engine)
 
 
+@app.get("/")
+def root():
+    return {
+        "app": settings.APP_NAME,
+        "version": settings.APP_VERSION,
+        "docs": "/docs",
+        "health": "/api/health",
+        "frontend": settings.FRONTEND_URL,
+    }
+
+
+@app.get("/health")
 @app.get("/api/health")
 def health_check():
     return {"status": "ok", "version": settings.APP_VERSION, "app": settings.APP_NAME}

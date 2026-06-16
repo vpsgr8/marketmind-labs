@@ -21,5 +21,5 @@ print('✅ Database schema created/verified')
 "
 
 echo "✅ Deployment complete!"
-echo "🌐 Site: https://marketmindlabs.com"
-echo "🔧 API: https://marketmindlabs.com/api/health"
+echo "🌐 Frontend: https://marketmind-frontend.onrender.com"
+echo "🔧 API: https://marketmind-api.onrender.com/api/health"
