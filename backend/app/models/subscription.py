@@ -12,5 +12,7 @@ class Subscription(Base):
     plan = Column(String(50), nullable=False)
     amount = Column(Float, nullable=False)
     is_active = Column(Boolean, default=True)
+    razorpay_subscription_id = Column(String(255), nullable=True, index=True)
+    razorpay_payment_id = Column(String(255), nullable=True)
     started_at = Column(DateTime(timezone=True), server_default=func.now())
     expires_at = Column(DateTime(timezone=True), nullable=True)

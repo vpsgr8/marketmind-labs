@@ -7,6 +7,7 @@ from app.database import get_db
 from app.models.user import User
 from app.models.alert import Alert
 from app.auth.jwt import get_current_user
+from app.utils.membership import is_premium
 
 router = APIRouter(prefix="/api/alerts", tags=["Alerts"])
 
@@ -24,6 +25,8 @@ def create_alert(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
+    if not is_premium(current_user):
+        raise HTTPException(status_code=403, detail="Premium subscription required")
     alert = Alert(
         user_id=current_user.id,
         alert_type=data.alert_type,

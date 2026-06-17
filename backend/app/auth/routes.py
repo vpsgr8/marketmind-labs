@@ -1,13 +1,17 @@
+from datetime import timedelta
+
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from pydantic import BaseModel, EmailStr
 from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models.user import User, PlanEnum
+from app.config import settings
 from app.auth.jwt import (
     verify_password, hash_password, create_access_token,
-    get_current_user, decode_token,
+    get_current_user,
 )
+from app.utils.membership import user_membership_payload, utcnow
 
 router = APIRouter(prefix="/api/auth", tags=["Authentication"])
 
@@ -40,6 +44,20 @@ class UserResponse(BaseModel):
     name: str
     email: str
     plan: str
+    is_premium: bool
+    is_trial_active: bool
+    trial_ends_at: str | None = None
+    premium_expires_at: str | None = None
+    trial_days_remaining: int = 0
+    subscription_amount_inr: int = 999
+
+
+def _user_dict(user: User) -> dict:
+    return {"id": user.id, "name": user.name, "email": user.email, **user_membership_payload(user)}
+
+
+def _start_trial(user: User) -> None:
+    user.trial_ends_at = utcnow() + timedelta(days=settings.TRIAL_DAYS)
 
 
 @router.post("/register", response_model=TokenResponse)
@@ -54,15 +72,13 @@ def register(req: RegisterRequest, db: Session = Depends(get_db)):
         password_hash=hash_password(req.password),
         plan=PlanEnum.GUEST,
     )
+    _start_trial(user)
     db.add(user)
     db.commit()
     db.refresh(user)
 
     token = create_access_token({"sub": str(user.id)})
-    return TokenResponse(
-        access_token=token,
-        user={"id": user.id, "name": user.name, "email": user.email, "plan": user.plan.value},
-    )
+    return TokenResponse(access_token=token, user=_user_dict(user))
 
 
 @router.post("/login", response_model=TokenResponse)
@@ -72,10 +88,7 @@ def login(req: LoginRequest, db: Session = Depends(get_db)):
         raise HTTPException(status_code=401, detail="Invalid email or password")
 
     token = create_access_token({"sub": str(user.id)})
-    return TokenResponse(
-        access_token=token,
-        user={"id": user.id, "name": user.name, "email": user.email, "plan": user.plan.value},
-    )
+    return TokenResponse(access_token=token, user=_user_dict(user))
 
 
 @router.post("/google", response_model=TokenResponse)
@@ -91,22 +104,21 @@ def google_login(req: GoogleLoginRequest, db: Session = Depends(get_db)):
             google_id=req.email,
             plan=PlanEnum.GUEST,
         )
+        _start_trial(user)
         db.add(user)
         db.commit()
         db.refresh(user)
 
     token = create_access_token({"sub": str(user.id)})
-    return TokenResponse(
-        access_token=token,
-        user={"id": user.id, "name": user.name, "email": user.email, "plan": user.plan.value},
-    )
+    return TokenResponse(access_token=token, user=_user_dict(user))
 
 
 @router.get("/me", response_model=UserResponse)
 def get_me(current_user: User = Depends(get_current_user)):
+    payload = user_membership_payload(current_user)
     return UserResponse(
         id=current_user.id,
         name=current_user.name,
         email=current_user.email,
-        plan=current_user.plan.value,
+        **payload,
     )

@@ -8,6 +8,7 @@ from app.database import get_db
 from app.models.user import User
 from app.models.report import Report
 from app.auth.jwt import get_current_user
+from app.utils.membership import is_premium
 
 router = APIRouter(prefix="/api/reports", tags=["Reports"])
 
@@ -27,6 +28,8 @@ def save_report(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
+    if not is_premium(current_user):
+        raise HTTPException(status_code=403, detail="Premium subscription required")
     report = Report(
         user_id=current_user.id,
         market=data.market,

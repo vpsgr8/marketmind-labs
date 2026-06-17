@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LogicTrade Monetization Integration</title>
+  <meta name="description" content="AdSense, Amazon Associates, and Razorpay subscription integration for LogicTrade / MarketMind Labs." />
+  <!-- Google AdSense — replace ca-pub-XXXXXXXXXXXXXXXX with your publisher ID -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 720px; margin: 2rem auto; padding: 0 1rem; color: #1f2937; line-height: 1.6; }
+    h1 { color: #1e3a8a; }
+    section { margin: 2rem 0; padding: 1.5rem; border: 1px solid #e5e7eb; border-radius: 12px; }
+    .ad-slot { min-height: 90px; background: #f9fafb; border: 1px dashed #d1d5db; display: flex; align-items: center; justify-content: center; margin: 1rem 0; }
+    .btn { display: inline-block; background: #2563eb; color: #fff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; border: none; cursor: pointer; }
+    .btn:hover { background: #1d4ed8; }
+    .amazon-link { color: #c2410c; }
+    footer { font-size: 0.75rem; color: #6b7280; margin-top: 3rem; }
+  </style>
+</head>
+<body>
+  <h1>LogicTrade — Monetization Stack</h1>
+  <p>This static HTML page documents the live integrations deployed via GitHub → Render at <strong>www.logictrade.site</strong>.</p>
+
+  <!-- 1. Google AdSense -->
+  <section id="adsense">
+    <h2>1. Google AdSense</h2>
+    <p>Display ads for free-tier users. Premium and trial users see no ads.</p>
+    <div class="ad-slot">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="1234567890"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+    </div>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    <p><small>Configure: <code>NEXT_PUBLIC_AD_CLIENT</code>, <code>AD_SLOT_*</code> env vars + <code>/ads.txt</code></small></p>
+  </section>
+
+  <!-- 2. Amazon Associates -->
+  <section id="amazon">
+    <h2>2. Amazon Associates (Affiliate)</h2>
+    <p>Recommended trading books — we earn from qualifying purchases.</p>
+    <ul>
+      <li><a class="amazon-link" href="https://www.amazon.in/dp/0071360530?tag=yourtag-21" rel="noopener sponsored" target="_blank">Trading in the Zone</a></li>
+      <li><a class="amazon-link" href="https://www.amazon.in/dp/0130660259?tag=yourtag-21" rel="noopener sponsored" target="_blank">Technical Analysis of Financial Markets</a></li>
+      <li><a class="amazon-link" href="https://www.amazon.in/dp/1118273052?tag=yourtag-21" rel="noopener sponsored" target="_blank">Market Wizards</a></li>
+    </ul>
+    <p><small>Configure: <code>AMAZON_AFFILIATE_TAG</code> / <code>NEXT_PUBLIC_AMAZON_AFFILIATE_TAG</code></small></p>
+  </section>
+
+  <!-- 3. Razorpay Subscription -->
+  <section id="razorpay">
+    <h2>3. Razorpay — 7-Day Trial → ₹999/month</h2>
+    <p>New users get a <strong>1-week free Premium trial</strong>. After trial, subscribe at ₹999/month.</p>
+    <button class="btn" id="subscribe-btn">Subscribe ₹999/month</button>
+    <p id="payment-status"></p>
+    <p><small>Configure: <code>RAZORPAY_KEY_ID</code>, <code>RAZORPAY_PLAN_ID</code>, webhook at <code>/api/payments/webhook</code></small></p>
+  </section>
+
+  <footer>
+    <p>LogicTrade / MarketMind Labs · Payments by Razorpay · Ads by Google · Amazon Associate disclosure applies.</p>
+    <p><a href="https://www.logictrade.site">← Back to live site</a></p>
+  </footer>
+
+  <!-- Razorpay Checkout -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+    document.getElementById('subscribe-btn').addEventListener('click', async function () {
+      var status = document.getElementById('payment-status');
+      status.textContent = 'Log in at logictrade.site first, then subscribe from /pricing';
+      status.style.color = '#2563eb';
+    });
+  </script>
+</body>
+</html>

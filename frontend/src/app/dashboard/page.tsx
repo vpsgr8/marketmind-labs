@@ -6,8 +6,10 @@ import { api } from '@/lib/api'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
+import SubscribeButton from '@/components/SubscribeButton'
+
 export default function DashboardPage() {
-  const { user, isPremium, loading } = useAuth()
+  const { user, isPremium, isTrialActive, loading } = useAuth()
   const router = useRouter()
   const [reports, setReports] = useState<any[]>([])
   const [alerts, setAlerts] = useState<any[]>([])
@@ -31,7 +33,17 @@ export default function DashboardPage() {
       <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
       <p className="text-gray-500 mb-8">Welcome back, {user.name}</p>
 
-      {!isPremium && (
+      {isTrialActive && (
+        <div className="bg-green-50 border border-green-200 rounded-xl p-6 mb-8">
+          <h2 className="font-semibold text-lg mb-2">Free Trial Active</h2>
+          <p className="text-sm text-gray-600 mb-4">
+            {user.trial_days_remaining} day(s) remaining. Subscribe at ₹999/month before trial ends to keep premium features.
+          </p>
+          <SubscribeButton label="Subscribe ₹999/month" className="!w-auto inline-block px-6" />
+        </div>
+      )}
+
+      {!isPremium && !isTrialActive && (
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 mb-8">
           <h2 className="font-semibold text-lg mb-2">Upgrade to Premium</h2>
           <p className="text-sm text-gray-600 mb-4">Get unlimited reports, PDF export, watchlists, alerts, and more.</p>

@@ -74,6 +74,19 @@ export const api = {
     me: () => request('/api/auth/me'),
   },
 
+  // Payments (Razorpay)
+  payments: {
+    plans: () => request('/api/payments/plans'),
+    status: () => request('/api/payments/status'),
+    createSubscription: () => request('/api/payments/create-subscription', { method: 'POST' }),
+    verify: (data: any) => request('/api/payments/verify', { method: 'POST', body: JSON.stringify(data) }),
+  },
+
+  // Monetization config
+  monetization: {
+    config: () => request('/api/ads/config'),
+  },
+
   // Reports (premium)
   reports: {
     save: (data: any) => request('/api/reports/save', { method: 'POST', body: JSON.stringify(data) }),

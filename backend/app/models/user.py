@@ -20,6 +20,8 @@ class User(Base):
     password_hash = Column(String(255), nullable=True)
     google_id = Column(String(255), nullable=True, unique=True)
     plan = Column(SAEnum(PlanEnum), default=PlanEnum.GUEST, nullable=False)
+    trial_ends_at = Column(DateTime(timezone=True), nullable=True)
+    premium_expires_at = Column(DateTime(timezone=True), nullable=True)
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())

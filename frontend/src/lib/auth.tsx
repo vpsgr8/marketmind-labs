@@ -8,9 +8,12 @@ interface AuthContextType {
   user: User | null
   token: string | null
   isPremium: boolean
+  isTrialActive: boolean
+  showAds: boolean
   isAdmin: boolean
   login: (token: string, user: User) => void
   logout: () => void
+  refreshUser: () => Promise<void>
   loading: boolean
 }
 
@@ -18,9 +21,12 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   token: null,
   isPremium: false,
+  isTrialActive: false,
+  showAds: true,
   isAdmin: false,
   login: () => {},
   logout: () => {},
+  refreshUser: async () => {},
   loading: true,
 })
 
@@ -28,6 +34,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [token, setToken] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
+
+  const refreshUser = async () => {
+    const me = await api.auth.me()
+    setUser(me)
+  }
 
   useEffect(() => {
     const saved = localStorage.getItem('token')
@@ -57,11 +68,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null)
   }
 
-  const isPremium = user?.plan === 'premium' || user?.plan === 'admin'
+  const isPremium = Boolean(user?.is_premium)
+  const isTrialActive = Boolean(user?.is_trial_active)
   const isAdmin = user?.plan === 'admin'
+  const showAds = !isPremium
 
   return (
-    <AuthContext.Provider value={{ user, token, isPremium, isAdmin, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, token, isPremium, isTrialActive, showAds, isAdmin, login, logout, refreshUser, loading }}>
       {children}
     </AuthContext.Provider>
   )

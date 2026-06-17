@@ -13,7 +13,7 @@ from app.utils.pdf import generate_report_pdf
 from app.api import (
     probability, gann, master_candle, swish,
     reversal_time, support_resistance, daily_outlook,
-    reports, alerts,
+    reports, alerts, payments,
 )
 from app.auth import routes as auth_routes
 
@@ -41,6 +41,7 @@ app.include_router(support_resistance.router)
 app.include_router(daily_outlook.router)
 app.include_router(reports.router)
 app.include_router(alerts.router)
+app.include_router(payments.router)
 
 
 @app.on_event("startup")
@@ -94,5 +95,15 @@ def ad_config():
         "slots": {
             "probability": settings.AD_SLOT_PROBABILITY,
             "sidebar": settings.AD_SLOT_SIDEBAR,
+            "footer": settings.AD_SLOT_FOOTER,
+        },
+        "amazon": {
+            "tag": settings.AMAZON_AFFILIATE_TAG,
+            "region": settings.AMAZON_AFFILIATE_REGION,
+        },
+        "subscription": {
+            "trial_days": settings.TRIAL_DAYS,
+            "monthly_amount_inr": settings.SUBSCRIPTION_AMOUNT_INR,
+            "razorpay_key_id": settings.RAZORPAY_KEY_ID or "",
         },
     }

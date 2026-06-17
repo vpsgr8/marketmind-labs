@@ -116,6 +116,18 @@ Copy `backend/.env.example` to `backend/.env` for local overrides.
 | `CORS_ORIGINS` | Comma-separated allowed origins |
 | `NEXT_PUBLIC_API_URL` | Backend URL used by the frontend |
 
+## Monetization (AdSense, Amazon, Razorpay)
+
+| Integration | Static HTML reference | Live in app |
+|-------------|----------------------|-------------|
+| Google AdSense | `/ads.txt`, `/monetization.html` | Calculator + footer ads |
+| Amazon Associates | `/monetization.html` | Sidebar affiliate links |
+| Razorpay ₹999/mo | `/monetization.html` | `/pricing`, 7-day trial on signup |
+
+Set credentials in Render env vars (see `backend/.env.example` and `frontend/.env.example`), then push to GitHub — Render auto-deploys.
+
+Webhook URL: `https://api.logictrade.site/api/payments/webhook`
+
 ## Deploy to Render
 
 1. Push to https://github.com/vpsgr8/marketmind-labs

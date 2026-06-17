@@ -33,7 +33,10 @@ export default function RegisterPage() {
   return (
     <div className="min-h-[70vh] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
-        <h1 className="text-3xl font-bold text-center mb-8">Create Account</h1>
+        <h1 className="text-3xl font-bold text-center mb-2">Create Account</h1>
+        <p className="text-center text-primary-700 text-sm font-medium mb-8">
+          Includes a 7-day Premium free trial — no payment required to start.
+        </p>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
@@ -53,7 +56,7 @@ export default function RegisterPage() {
           {error && <p className="text-red-500 text-sm">{error}</p>}
           <button type="submit" disabled={loading}
             className="w-full bg-primary-600 text-white py-3 rounded-lg font-semibold hover:bg-primary-700 disabled:opacity-50">
-            {loading ? 'Creating account...' : 'Register'}
+            {loading ? 'Creating account...' : 'Start 7-Day Free Trial'}
           </button>
         </form>
         <p className="text-center text-sm text-gray-500 mt-4">

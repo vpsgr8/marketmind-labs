@@ -1,3 +1,30 @@
+export interface User {
+  id: number
+  name: string
+  email: string
+  plan: string
+  is_premium?: boolean
+  is_trial_active?: boolean
+  trial_ends_at?: string | null
+  premium_expires_at?: string | null
+  trial_days_remaining?: number
+  subscription_amount_inr?: number
+}
+
+export interface AuthResponse {
+  access_token: string
+  token_type: string
+  user: User
+}
+
+export interface PaymentPlans {
+  trial_days: number
+  monthly_amount_inr: number
+  currency: string
+  plan_name: string
+  razorpay_configured: boolean
+}
+
 export interface CandleData {
   open: number
   high: number
@@ -110,17 +137,4 @@ export interface DailyOutlookResult {
   confidence_score: number
   key_levels: Record<string, number>
   suggested_strategy: string
-}
-
-export interface User {
-  id: number
-  name: string
-  email: string
-  plan: string
-}
-
-export interface AuthResponse {
-  access_token: string
-  token_type: string
-  user: User
 }

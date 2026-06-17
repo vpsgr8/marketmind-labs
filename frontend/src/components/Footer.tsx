@@ -16,9 +16,9 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="text-white font-bold text-lg mb-4">MarketMind Labs</h3>
+            <h3 className="text-white font-bold text-lg mb-4">LogicTrade</h3>
             <p className="text-sm text-gray-400">
-              India's first retail trader-focused probability &amp; market structure analysis platform.
+              Probability &amp; market structure analysis for Indian traders. Powered by MarketMind Labs.
             </p>
           </div>
           <div>
@@ -35,7 +35,8 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-4">Resources</h4>
             <ul className="space-y-2 text-sm">
               <li><Link href="/blog" className="hover:text-white transition-colors">Blog</Link></li>
-              <li><Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
+              <li><Link href="/pricing" className="hover:text-white transition-colors">Pricing — ₹999/mo</Link></li>
+              <li><Link href="/monetization.html" className="hover:text-white transition-colors">Integrations</Link></li>
             </ul>
           </div>
           <div>
@@ -46,9 +47,13 @@ export default function Footer() {
             </ul>
           </div>
         </div>
-        <div className="mt-8 pt-8 border-t border-gray-700 text-center text-xs text-gray-500">
-          <p>Disclaimer: This platform provides educational and analytical information only. No investment advice is provided. Trading involves risk. Past performance does not guarantee future results.</p>
-          <p className="mt-2">&copy; {new Date().getFullYear()} MarketMind Labs. All rights reserved.</p>
+        <div className="mt-8 pt-8 border-t border-gray-700 text-center text-xs text-gray-500 space-y-2">
+          <p>
+            We use Google AdSense for ads, Amazon Associates for affiliate links, and Razorpay for secure payments.
+            Premium subscribers enjoy an ad-free experience.
+          </p>
+          <p>Disclaimer: Educational information only. Not investment advice. Trading involves risk.</p>
+          <p>&copy; {new Date().getFullYear()} LogicTrade / MarketMind Labs. All rights reserved.</p>
         </div>
       </div>
     </footer>
