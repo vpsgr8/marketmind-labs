@@ -85,11 +85,11 @@ class GannTimeCycle:
 
 class GannEngine:
     def __init__(self):
-        self.square_of_9 = GannSquareOf9()
-        self.time_cycle = GannTimeCycle()
+        self._square = GannSquareOf9()
+        self._time_cycle = GannTimeCycle()
 
     def square_of_9(self, price: float) -> Dict:
-        return self.square_of_9.calculate(price)
+        return self._square.calculate(price)
 
     def time_cycle_calc(self, high_date: str, low_date: str) -> Dict:
-        return self.time_cycle.calculate(high_date, low_date)
+        return self._time_cycle.calculate(high_date, low_date)

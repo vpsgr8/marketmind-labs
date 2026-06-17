@@ -35,6 +35,19 @@ def test_reversal_times(client):
     assert len(data["times"]) > 0
 
 
+def test_gann_square_of_9(client):
+    response = client.post(
+        "/api/gann/square-of-9",
+        json={"price": 19500},
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert data["price"] == 19500
+    assert "levels" in data
+    assert "cardinal_points" in data
+    assert "ordinal_points" in data
+
+
 def test_auth_register_and_login(client):
     email = "tester@example.com"
     password = "securepass123"

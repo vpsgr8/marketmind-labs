@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   },
   metadataBase: new URL('https://www.logictrade.site'),
   description: "India's first retail trader-focused platform combining Candle Mathematics, Market Structure Analysis, GANN Intelligence, and Probability Models for better trading decisions.",
-  keywords: ['NIFTY', 'BANKNIFTY', 'SENSEX', 'probability calculator', 'GANN square of 9', 'master candle', 'swish breakout', 'trading analysis', 'market structure'],
+  keywords: ['NIFTY', 'BANKNIFTY', 'SENSEX', 'probability calculator', 'GANN square of 9', 'GANN time cycle', 'master candle', 'swish breakout', 'intraday reversal', 'support resistance', 'daily outlook', 'trading analysis', 'market structure', 'options trading India', 'NIFTY support resistance', 'bank nifty calculator'],
   openGraph: {
     title: 'MarketMind Labs',
     description: 'Probability & Market Structure Analysis Platform',
