@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { OTHER_PRODUCTS } from '@/lib/other-products'
 
 const tools = [
   { label: 'NIFTY Probability', href: '/nifty-probability-calculator' },
@@ -17,7 +18,7 @@ export default function Footer() {
   return (
     <footer className="bg-gray-900 text-gray-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           <div>
             <h3 className="text-white font-bold text-lg mb-4">LogicTrade</h3>
             <p className="text-sm text-gray-400">
@@ -48,9 +49,23 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-4">Resources</h4>
             <ul className="space-y-2 text-sm">
               <li><Link href="/blog" className="hover:text-white transition-colors">Blog &amp; Guides</Link></li>
+              <li><Link href="/our-products" className="hover:text-white transition-colors">Our Products</Link></li>
               <li><Link href="/pricing" className="hover:text-white transition-colors">Pricing — ₹999/mo</Link></li>
               <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
               <li><Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-white font-semibold mb-4">Our Products</h4>
+            <ul className="space-y-3 text-sm">
+              {OTHER_PRODUCTS.map((p) => (
+                <li key={p.domain}>
+                  <a href={p.url} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors block">
+                    <span className="text-white font-medium">{p.name}</span>
+                    <span className="block text-gray-500 text-xs mt-0.5">{p.tagline}</span>
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
         </div>

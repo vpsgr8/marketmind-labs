@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { TrendingUp, BarChart3, Brain, Shield, Zap, Target } from 'lucide-react'
+import { TrendingUp, BarChart3, Brain, Shield, Zap, Target, ExternalLink } from 'lucide-react'
+import { OTHER_PRODUCTS } from '@/lib/other-products'
 
 const features = [
   { icon: BarChart3, title: 'Probability Models', desc: 'Data-driven bull/bear/sideways probability scores with confidence metrics.' },
@@ -73,6 +74,38 @@ export default function HomePage() {
               </Link>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="bg-gray-50 py-16 lg:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-center mb-3">More from MarketMind Labs</h2>
+          <p className="text-gray-500 text-center mb-10 max-w-2xl mx-auto">
+            LogicTrade is part of a family of practical tools for Indian users. Explore our other products below.
+          </p>
+          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {OTHER_PRODUCTS.map((p) => (
+              <a
+                key={p.domain}
+                href={p.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white border border-gray-200 rounded-xl p-6 hover:border-primary-300 hover:shadow-md transition-all group"
+              >
+                <h3 className="font-semibold text-lg mb-1 group-hover:text-primary-600 transition-colors">
+                  {p.name}
+                  <ExternalLink className="inline w-4 h-4 ml-1 opacity-50" />
+                </h3>
+                <p className="text-primary-600 text-sm font-medium mb-2">{p.domain}</p>
+                <p className="text-gray-600 text-sm">{p.description}</p>
+              </a>
+            ))}
+          </div>
+          <p className="text-center mt-8">
+            <Link href="/our-products" className="text-primary-600 font-medium hover:text-primary-700">
+              View all our products →
+            </Link>
+          </p>
         </div>
       </section>
 

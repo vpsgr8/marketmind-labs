@@ -51,6 +51,7 @@ export default function Header() {
               </div>
             </div>
             <Link href="/blog" className="text-gray-600 hover:text-primary-600 font-medium">Blog</Link>
+            <Link href="/our-products" className="text-gray-600 hover:text-primary-600 font-medium">Our Products</Link>
             {isPremium && <Link href="/dashboard" className="text-gray-600 hover:text-primary-600 font-medium">Dashboard</Link>}
           </nav>
 
@@ -92,6 +93,7 @@ export default function Header() {
                 </Link>
               ))}
               <Link href="/blog" className="block py-2 text-gray-600 hover:text-primary-600" onClick={() => setMobileOpen(false)}>Blog</Link>
+              <Link href="/our-products" className="block py-2 text-gray-600 hover:text-primary-600" onClick={() => setMobileOpen(false)}>Our Products</Link>
             </div>
           </div>
         )}
