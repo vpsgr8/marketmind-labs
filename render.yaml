@@ -35,8 +35,9 @@ services:
     rootDir: frontend
     plan: free
     envVars:
+      # TEMP: direct Render URL until api.logictrade.site SSL is verified; then switch back
       - key: NEXT_PUBLIC_API_URL
-        value: https://api.logictrade.site
+        value: https://marketmind-api-pdn0.onrender.com
       - key: NODE_VERSION
         value: 20
 
