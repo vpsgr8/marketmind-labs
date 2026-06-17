@@ -44,7 +44,7 @@ Remove any conflicting `URL Redirect` or parking records for `@` and `www`, then
 
 Use the exact CNAME targets Render shows in your dashboard if they differ from the table above.
 
-> **Important:** If `api.logictrade.site` still points to the old `marketmind-api.onrender.com` hostname, calculators on the site will fail. Update the `api` CNAME to `marketmind-api-pdn0.onrender.com`. Until DNS propagates, set `NEXT_PUBLIC_API_URL=https://marketmind-api-pdn0.onrender.com` on the frontend service in Render and redeploy.
+> **Important:** If `api.logictrade.site` still points to the old `marketmind-api.onrender.com` hostname, calculators on the site will fail. Update the `api` CNAME to `marketmind-api-pdn0.onrender.com`. The frontend uses `https://api.logictrade.site` via `NEXT_PUBLIC_API_URL` in `render.yaml`.
 
 ### 3. Verify
 
