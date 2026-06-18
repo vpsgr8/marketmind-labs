@@ -23,6 +23,18 @@ class VerifySubscriptionRequest(BaseModel):
     razorpay_signature: str
 
 
+class ConsultationOrderRequest(BaseModel):
+    name: str | None = None
+    email: str | None = None
+    contact: str | None = None
+
+
+class ConsultationVerifyRequest(BaseModel):
+    razorpay_order_id: str
+    razorpay_payment_id: str
+    razorpay_signature: str
+
+
 def _razorpay_client():
     if not settings.RAZORPAY_KEY_ID or not settings.RAZORPAY_KEY_SECRET:
         raise HTTPException(status_code=503, detail="Payment gateway not configured")
@@ -127,6 +139,68 @@ def create_subscription(current_user: User = Depends(get_current_user), db: Sess
         "amount_inr": settings.SUBSCRIPTION_AMOUNT_INR,
         "trial_days": settings.TRIAL_DAYS,
         "user": {"name": current_user.name, "email": current_user.email},
+    }
+
+
+@router.get("/consultation")
+def consultation_info():
+    return {
+        "fee_inr": settings.CONSULTATION_FEE_INR,
+        "razorpay_configured": bool(settings.RAZORPAY_KEY_ID and settings.RAZORPAY_KEY_SECRET),
+    }
+
+
+@router.post("/consultation/create-order")
+def create_consultation_order(data: ConsultationOrderRequest):
+    client = _razorpay_client()
+    amount_paise = settings.CONSULTATION_FEE_INR * 100
+    try:
+        order = client.order.create(
+            {
+                "amount": amount_paise,
+                "currency": "INR",
+                "payment_capture": 1,
+                "notes": {
+                    "type": "consultation",
+                    "name": data.name or "",
+                    "email": data.email or "",
+                    "contact": data.contact or "",
+                },
+            }
+        )
+    except Exception as exc:
+        raise HTTPException(status_code=502, detail=f"Razorpay error: {exc}") from exc
+
+    return {
+        "order_id": order["id"],
+        "key_id": settings.RAZORPAY_KEY_ID,
+        "amount": amount_paise,
+        "amount_inr": settings.CONSULTATION_FEE_INR,
+        "currency": "INR",
+    }
+
+
+@router.post("/consultation/verify")
+def verify_consultation(data: ConsultationVerifyRequest):
+    client = _razorpay_client()
+    try:
+        client.utility.verify_payment_signature(
+            {
+                "razorpay_order_id": data.razorpay_order_id,
+                "razorpay_payment_id": data.razorpay_payment_id,
+                "razorpay_signature": data.razorpay_signature,
+            }
+        )
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail="Invalid payment signature") from exc
+
+    whatsapp = settings.CONSULTATION_WHATSAPP
+    return {
+        "status": "paid",
+        "whatsapp": whatsapp,
+        "whatsapp_link": f"https://wa.me/{whatsapp}",
+        "email": settings.CONSULTATION_EMAIL,
+        "message": "Payment received! Here are your private contact details.",
     }
 
 

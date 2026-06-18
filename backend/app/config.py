@@ -38,6 +38,12 @@ class Settings(BaseSettings):
     SUBSCRIPTION_AMOUNT_INR: int = 999
     TRIAL_DAYS: int = 7
 
+    # One-time 1-on-1 consultation. Contact details are revealed only after
+    # a verified ₹3999 payment, so they never ship in the public frontend bundle.
+    CONSULTATION_FEE_INR: int = 3999
+    CONSULTATION_WHATSAPP: str = "919527089655"
+    CONSULTATION_EMAIL: str = "mml.products26@gmail.com"
+
     class Config:
         env_file = ".env"
 

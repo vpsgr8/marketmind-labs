@@ -1,12 +1,6 @@
 import Link from 'next/link'
-import { MessageCircle, Mail } from 'lucide-react'
 import { OTHER_PRODUCTS } from '@/lib/other-products'
-
-const WHATSAPP_NUMBER = '919527089655'
-const CONSULT_EMAIL = 'mml.products26@gmail.com'
-const WHATSAPP_MSG = encodeURIComponent(
-  "Hi! I'd like to book the ₹3999 one-time LogicTrade consultation to learn how to use the tools properly.",
-)
+import ConsultationOffer from '@/components/ConsultationOffer'
 
 const tools = [
   { label: 'NIFTY Probability', href: '/nifty-probability-calculator' },
@@ -24,48 +18,7 @@ const tools = [
 export default function Footer() {
   return (
     <footer className="bg-gray-900 text-gray-300">
-      <div className="bg-gradient-to-r from-primary-700 via-primary-600 to-primary-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-6 text-center lg:text-left">
-            <div className="max-w-2xl">
-              <span className="inline-block bg-yellow-300 text-gray-900 text-xs font-bold px-3 py-1 rounded-full mb-3">
-                LIMITED 1-ON-1 SLOTS
-              </span>
-              <h3 className="text-white text-xl lg:text-2xl font-bold mb-2">
-                Want to truly master these tools? Let me teach you personally.
-              </h3>
-              <p className="text-primary-100 text-sm lg:text-base">
-                Book a private 1-on-1 session and I&apos;ll walk you through the exact setups, pro tips,
-                hidden tricks, and time-saving cheats to read NIFTY, BANKNIFTY &amp; SENSEX like a pro —
-                so you stop guessing and start trading with confidence.
-              </p>
-              <p className="text-white font-semibold mt-3">
-                One-time fee — just{' '}
-                <span className="text-yellow-300 text-lg">₹3,999</span>{' '}
-                <span className="text-primary-200 font-normal text-sm">
-                  (no subscription, lifetime know-how)
-                </span>
-              </p>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-3 shrink-0">
-              <a
-                href={`https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_MSG}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600 transition-colors shadow-lg"
-              >
-                <MessageCircle className="w-5 h-5" /> Chat on WhatsApp
-              </a>
-              <a
-                href={`mailto:${CONSULT_EMAIL}?subject=${encodeURIComponent('LogicTrade ₹3999 Consultation')}`}
-                className="inline-flex items-center justify-center gap-2 bg-white text-primary-700 px-6 py-3 rounded-lg font-semibold hover:bg-primary-50 transition-colors shadow-lg"
-              >
-                <Mail className="w-5 h-5" /> Email Me
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
+      <ConsultationOffer />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           <div>

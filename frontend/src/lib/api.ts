@@ -100,6 +100,11 @@ export const api = {
     status: () => request('/api/payments/status'),
     createSubscription: () => request('/api/payments/create-subscription', { method: 'POST' }),
     verify: (data: any) => request('/api/payments/verify', { method: 'POST', body: JSON.stringify(data) }),
+    consultation: {
+      info: () => request('/api/payments/consultation'),
+      createOrder: (data: any) => request('/api/payments/consultation/create-order', { method: 'POST', body: JSON.stringify(data) }),
+      verify: (data: any) => request('/api/payments/consultation/verify', { method: 'POST', body: JSON.stringify(data) }),
+    },
   },
 
   // Monetization config
