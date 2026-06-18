@@ -71,6 +71,17 @@ def on_startup():
         pass
 
 
+@app.exception_handler(Exception)
+async def _debug_exception_handler(request, exc):
+    # Temporary: surface real error details to diagnose 500s.
+    import traceback
+
+    return JSONResponse(
+        status_code=500,
+        content={"detail": f"{type(exc).__name__}: {exc}", "trace": traceback.format_exc()[-1500:]},
+    )
+
+
 @app.get("/")
 def root():
     return {
