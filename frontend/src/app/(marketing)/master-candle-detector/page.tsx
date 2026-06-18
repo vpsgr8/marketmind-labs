@@ -14,6 +14,7 @@ export default function MasterCandlePage() {
   ])
   const [result, setResult] = useState<MasterCandleResult | null>(null)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const updateCandle = (idx: number, field: keyof CandleData, value: string) => {
     const updated = [...candles]
@@ -23,11 +24,18 @@ export default function MasterCandlePage() {
 
   const detect = async () => {
     setLoading(true)
+    setError('')
+    setResult(null)
     try {
-      const res = await api.masterCandle.detect({ candles })
+      const filled = candles.filter((c) => c.high > 0 && c.low > 0)
+      if (filled.length < 5) {
+        setError('Enter at least 5 candles (open, high, low, close) to detect a master candle.')
+        return
+      }
+      const res = await api.masterCandle.detect({ candles: filled })
       setResult(res)
-    } catch (e) {
-      console.error(e)
+    } catch (e: any) {
+      setError(e.message || 'Detection failed. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -74,6 +82,7 @@ export default function MasterCandlePage() {
         className="bg-primary-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-700 disabled:opacity-50">
         {loading ? 'Detecting...' : 'Detect Master Candle'}
       </button>
+      {error && <p className="mt-3 text-red-500 text-sm">{error}</p>}
 
       {result && (
         <div className="mt-8 grid md:grid-cols-2 gap-6">

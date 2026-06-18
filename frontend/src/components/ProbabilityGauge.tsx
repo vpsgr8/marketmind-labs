@@ -7,8 +7,9 @@ interface Props {
 }
 
 export default function ProbabilityGauge({ value, label, color }: Props) {
+  const safeValue = Math.min(100, Math.max(0, value || 0))
   const circumference = 2 * Math.PI * 40
-  const offset = circumference - (value / 100) * circumference
+  const offset = circumference - (safeValue / 100) * circumference
 
   return (
     <div className="flex flex-col items-center">
@@ -25,7 +26,7 @@ export default function ProbabilityGauge({ value, label, color }: Props) {
         />
         <text x="50" y="50" textAnchor="middle" dominantBaseline="central"
           className="text-xl font-bold" fill={color}>
-          {Math.round(value)}%
+          {Math.round(safeValue)}%
         </text>
       </svg>
       <span className="text-sm font-medium text-gray-600 mt-1">{label}</span>

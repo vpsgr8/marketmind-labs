@@ -10,6 +10,7 @@ export default function SwishBreakoutPage() {
   )
   const [result, setResult] = useState<any>(null)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
   const [mode, setMode] = useState<'analyze' | 'scan'>('analyze')
 
   const updateCandle = (idx: number, field: keyof CandleData, value: string) => {
@@ -20,12 +21,19 @@ export default function SwishBreakoutPage() {
 
   const run = async () => {
     setLoading(true)
+    setError('')
+    setResult(null)
     try {
+      const filled = candles.filter((c) => c.high > 0 && c.low > 0)
+      if (filled.length < 5) {
+        setError('Enter at least 5 candles (open, high, low, close) to scan for swish breakouts.')
+        return
+      }
       const fn = mode === 'analyze' ? api.swish.analyze : api.swish.scan
-      const res = await fn({ candles })
+      const res = await fn({ candles: filled })
       setResult(res)
-    } catch (e) {
-      console.error(e)
+    } catch (e: any) {
+      setError(e.message || 'Scan failed. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -65,10 +73,15 @@ export default function SwishBreakoutPage() {
         className="bg-primary-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-700 disabled:opacity-50">
         {loading ? 'Scanning...' : mode === 'analyze' ? 'Analyze Swish' : 'Scan Swish Patterns'}
       </button>
+      {error && <p className="mt-3 text-red-500 text-sm">{error}</p>}
 
       {result && (
         <div className="mt-8 bg-gray-50 rounded-xl p-6">
-          <pre className="text-sm">{JSON.stringify(result, null, 2)}</pre>
+          {(Array.isArray(result) && result.length === 0) || result?.found === false ? (
+            <p className="text-gray-500">No swish breakout setups detected in the given data.</p>
+          ) : (
+            <pre className="text-sm overflow-x-auto">{JSON.stringify(result, null, 2)}</pre>
+          )}
         </div>
       )}
     </div>

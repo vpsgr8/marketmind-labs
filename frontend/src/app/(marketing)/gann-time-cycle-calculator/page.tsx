@@ -8,11 +8,25 @@ export default function GannTimeCyclePage() {
   const [highDate, setHighDate] = useState('')
   const [lowDate, setLowDate] = useState('')
   const [result, setResult] = useState<GannTimeResult | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const calculate = async () => {
-    if (!highDate || !lowDate) return
-    const res = await api.gann.timeCycle({ swing_high_date: highDate, swing_low_date: lowDate })
-    setResult(res)
+    setError('')
+    if (!highDate || !lowDate) {
+      setError('Please select both a swing high date and a swing low date.')
+      return
+    }
+    setLoading(true)
+    setResult(null)
+    try {
+      const res = await api.gann.timeCycle({ swing_high_date: highDate, swing_low_date: lowDate })
+      setResult(res)
+    } catch (e: any) {
+      setError(e.message || 'Calculation failed. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -35,9 +49,10 @@ export default function GannTimeCyclePage() {
           <input type="date" value={lowDate} onChange={(e) => setLowDate(e.target.value)}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg" />
         </div>
-        <button onClick={calculate} className="w-full bg-primary-600 text-white py-3 rounded-lg font-semibold hover:bg-primary-700">
-          Calculate Cycles
+        <button onClick={calculate} disabled={loading} className="w-full bg-primary-600 text-white py-3 rounded-lg font-semibold hover:bg-primary-700 disabled:opacity-50">
+          {loading ? 'Calculating...' : 'Calculate Cycles'}
         </button>
+        {error && <p className="text-red-500 text-sm">{error}</p>}
       </div>
 
       {result && (

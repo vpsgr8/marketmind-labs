@@ -7,7 +7,10 @@ function getToken(): string | null {
   return null
 }
 
-async function request(path: string, options: RequestInit = {}): Promise<any> {
+// The API runs on a free tier that sleeps when idle; the first request can take
+// up to ~90s to wake the server. Retry once on network/timeout failures so tools
+// don't appear broken on a cold start.
+async function request(path: string, options: RequestInit = {}, attempt = 0): Promise<any> {
   const token = getToken()
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
@@ -17,12 +20,29 @@ async function request(path: string, options: RequestInit = {}): Promise<any> {
     headers['Authorization'] = `Bearer ${token}`
   }
 
-  const res = await fetch(`${API_URL}${path}`, { ...options, headers })
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({ detail: res.statusText }))
-    throw new Error(err.detail || 'API request failed')
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), 95000)
+
+  try {
+    const res = await fetch(`${API_URL}${path}`, { ...options, headers, signal: controller.signal })
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ detail: res.statusText }))
+      throw new Error(err.detail || 'API request failed')
+    }
+    return await res.json()
+  } catch (e: any) {
+    const isNetworkOrTimeout =
+      e?.name === 'AbortError' || e instanceof TypeError
+    if (isNetworkOrTimeout && attempt < 1) {
+      return request(path, options, attempt + 1)
+    }
+    if (e?.name === 'AbortError') {
+      throw new Error('The server is taking longer than usual to respond. Please try again in a moment.')
+    }
+    throw e
+  } finally {
+    clearTimeout(timeout)
   }
-  return res.json()
 }
 
 export const api = {

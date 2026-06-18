@@ -9,6 +9,8 @@ export default function SupportResistancePage() {
     Array.from({ length: 10 }, () => ({ open: 0, high: 0, low: 0, close: 0 }))
   )
   const [result, setResult] = useState<SupportResistanceResult | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const update = (idx: number, field: keyof CandleData, value: string) => {
     const updated = [...candles]
@@ -17,8 +19,26 @@ export default function SupportResistancePage() {
   }
 
   const calculate = async () => {
-    const res = await api.supportResistance.calculate({ candles })
-    setResult(res)
+    setLoading(true)
+    setError('')
+    setResult(null)
+    try {
+      const filled = candles.filter((c) => c.high > 0 && c.low > 0)
+      if (filled.length < 10) {
+        setError('Enter at least 10 candles (open, high, low, close) to calculate support & resistance.')
+        return
+      }
+      const res = await api.supportResistance.calculate({ candles: filled })
+      if ((res as any).error) {
+        setError((res as any).error)
+        return
+      }
+      setResult(res)
+    } catch (e: any) {
+      setError(e.message || 'Calculation failed. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -47,9 +67,10 @@ export default function SupportResistancePage() {
               </div>
             ))}
           </div>
-          <button onClick={calculate} className="bg-primary-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-700">
-            Calculate S&amp;R
+          <button onClick={calculate} disabled={loading} className="bg-primary-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-700 disabled:opacity-50">
+            {loading ? 'Calculating...' : 'Calculate S&R'}
           </button>
+          {error && <p className="mt-3 text-red-500 text-sm">{error}</p>}
         </div>
 
         {result && (

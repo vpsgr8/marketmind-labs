@@ -7,10 +7,22 @@ import type { ReversalTimeResult } from '@/types'
 export default function IntradayReversalPage() {
   const [result, setResult] = useState<ReversalTimeResult | null>(null)
   const [times, setTimes] = useState<any>(null)
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(true)
+
+  const load = () => {
+    setError('')
+    setLoading(true)
+    Promise.all([
+      api.reversalTime.calculate({}).then(setResult),
+      api.reversalTime.times().then(setTimes),
+    ])
+      .catch((e: any) => setError(e?.message || 'Could not load reversal times. Please try again.'))
+      .finally(() => setLoading(false))
+  }
 
   useEffect(() => {
-    api.reversalTime.calculate({}).then(setResult)
-    api.reversalTime.times().then(setTimes)
+    load()
   }, [])
 
   return (
@@ -21,6 +33,16 @@ export default function IntradayReversalPage() {
           GANN-based intraday reversal timing for the Indian market session. Know when the next reversal is due.
         </p>
       </div>
+
+      {loading && <p className="text-center text-gray-500 mb-6">Loading reversal times…</p>}
+      {error && (
+        <div className="text-center mb-8">
+          <p className="text-red-500 text-sm mb-2">{error}</p>
+          <button onClick={load} className="bg-primary-600 text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-primary-700">
+            Retry
+          </button>
+        </div>
+      )}
 
       {result && (
         <div className="grid md:grid-cols-2 gap-6 mb-8">

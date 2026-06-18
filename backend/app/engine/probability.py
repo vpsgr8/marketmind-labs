@@ -22,7 +22,8 @@ class ProbabilityEngine:
         volatility = self._volatility(open_p, high, low, close)
         gann = self._gann_factor(high, low)
 
-        total = (
+        # Raw directional bias, 0-100 (50 = perfectly balanced)
+        bull_score = (
             self.weights["candle_strength"] * candle_strength
             + self.weights["bull_force"] * bull_force
             + self.weights["momentum"] * momentum
@@ -30,18 +31,27 @@ class ProbabilityEngine:
             + self.weights["volatility"] * volatility
             + self.weights["gann"] * gann
         )
+        bull_score = min(100, max(0, bull_score))
 
-        bull_prob = total
-        bear_prob = 100 - total
-        sideways_prob = max(0, 30 - abs(bull_prob - 50) * 0.6)
-        confidence = min(100, 50 + abs(bull_prob - 50) + volatility * 0.3)
+        # Bull, bear and sideways are mutually exclusive outcomes and MUST sum to 100.
+        # Sideways grows when the bias is near neutral and the candle body is small.
+        total_range = high - low
+        body_ratio = abs(close - open_p) / total_range if total_range > 0 else 0
+        neutrality = max(0.0, 1 - abs(bull_score - 50) / 50)
+        sideways_prob = round(neutrality * (1 - body_ratio) * 40, 2)
 
-        signal = self._get_signal(bull_prob)
+        directional = 100 - sideways_prob
+        bull_prob = round(directional * (bull_score / 100), 2)
+        bear_prob = round(100 - sideways_prob - bull_prob, 2)
+
+        confidence = min(100, 50 + abs(bull_score - 50) + volatility * 0.3)
+
+        signal = self._get_signal(bull_score)
 
         return {
-            "bull_probability": round(bull_prob, 2),
-            "bear_probability": round(bear_prob, 2),
-            "sideways_probability": round(sideways_prob, 2),
+            "bull_probability": bull_prob,
+            "bear_probability": bear_prob,
+            "sideways_probability": sideways_prob,
             "confidence_score": round(confidence, 2),
             "signal": signal,
             "components": {

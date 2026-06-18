@@ -24,6 +24,14 @@ def test_nifty_probability(client):
     assert "bear_probability" in data
     assert "signal" in data
     assert 0 <= data["bull_probability"] <= 100
+    assert 0 <= data["bear_probability"] <= 100
+    assert 0 <= data["sideways_probability"] <= 100
+    total = (
+        data["bull_probability"]
+        + data["bear_probability"]
+        + data["sideways_probability"]
+    )
+    assert abs(total - 100) < 0.5, f"probabilities must sum to 100, got {total}"
 
 
 def test_reversal_times(client):

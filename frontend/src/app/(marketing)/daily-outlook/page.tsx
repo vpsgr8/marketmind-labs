@@ -9,6 +9,8 @@ export default function DailyOutlookPage() {
     Array.from({ length: 5 }, () => ({ open: 0, high: 0, low: 0, close: 0 }))
   )
   const [result, setResult] = useState<DailyOutlookResult | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const update = (idx: number, field: keyof CandleData, value: string) => {
     const updated = [...candles]
@@ -17,8 +19,22 @@ export default function DailyOutlookPage() {
   }
 
   const generate = async () => {
-    const res = await api.dailyOutlook.generate({ candles, market: 'NIFTY' })
-    setResult(res)
+    setLoading(true)
+    setError('')
+    setResult(null)
+    try {
+      const filled = candles.filter((c) => c.high > 0 && c.low > 0)
+      if (filled.length < 1) {
+        setError('Enter at least one candle (open, high, low, close) to generate an outlook.')
+        return
+      }
+      const res = await api.dailyOutlook.generate({ candles: filled, market: 'NIFTY' })
+      setResult(res)
+    } catch (e: any) {
+      setError(e.message || 'Could not generate outlook. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   const directionColor = (d: string) =>
@@ -50,9 +66,10 @@ export default function DailyOutlookPage() {
               </div>
             ))}
           </div>
-          <button onClick={generate} className="bg-primary-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-700">
-            Generate Outlook
+          <button onClick={generate} disabled={loading} className="bg-primary-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-700 disabled:opacity-50">
+            {loading ? 'Generating...' : 'Generate Outlook'}
           </button>
+          {error && <p className="mt-3 text-red-500 text-sm">{error}</p>}
         </div>
 
         {result && (
