@@ -44,8 +44,8 @@ app.include_router(alerts.router)
 app.include_router(payments.router)
 
 
-def _run_lightweight_migrations():
-    """Add columns that were introduced after the table was first created.
+def _run_lightweight_migrations() -> dict:
+    """Add columns that were introduced after a table was first created.
 
     Base.metadata.create_all only creates missing tables, not new columns on
     existing ones, so we add them idempotently here. Works on Postgres and SQLite.
@@ -53,12 +53,35 @@ def _run_lightweight_migrations():
     from sqlalchemy import inspect, text
 
     inspector = inspect(engine)
-    if "users" not in inspector.get_table_names():
-        return
-    columns = {col["name"] for col in inspector.get_columns("users")}
-    if "mobile" not in columns:
-        with engine.begin() as conn:
-            conn.execute(text("ALTER TABLE users ADD COLUMN mobile VARCHAR(20)"))
+    is_pg = engine.dialect.name == "postgresql"
+    ts = "TIMESTAMP WITH TIME ZONE" if is_pg else "TIMESTAMP"
+
+    wanted = {
+        "users": {
+            "mobile": "VARCHAR(20)",
+            "trial_ends_at": ts,
+            "premium_expires_at": ts,
+        },
+        "subscriptions": {
+            "razorpay_subscription_id": "VARCHAR(255)",
+            "razorpay_payment_id": "VARCHAR(255)",
+            "started_at": ts,
+            "expires_at": ts,
+        },
+    }
+
+    applied = []
+    tables = set(inspector.get_table_names())
+    for table, cols in wanted.items():
+        if table not in tables:
+            continue
+        existing = {c["name"] for c in inspector.get_columns(table)}
+        for col, ddl in cols.items():
+            if col not in existing:
+                with engine.begin() as conn:
+                    conn.execute(text(f"ALTER TABLE {table} ADD COLUMN {col} {ddl}"))
+                applied.append(f"{table}.{col}")
+    return {"applied": applied}
 
 
 @app.on_event("startup")
@@ -123,27 +146,17 @@ def export_pdf(data: PDFExportInput):
 
 @app.get("/api/debug/migrate")
 def debug_migrate():
-    """Temporary: inspect users table and add the mobile column if missing."""
-    from sqlalchemy import inspect, text
+    """Temporary: apply lightweight column migrations and report schema."""
+    from sqlalchemy import inspect
 
     out: dict = {}
     try:
+        out["migration"] = _run_lightweight_migrations()
         inspector = inspect(engine)
-        out["tables"] = inspector.get_table_names()
         out["user_columns"] = [c["name"] for c in inspector.get_columns("users")]
+        out["subscription_columns"] = [c["name"] for c in inspector.get_columns("subscriptions")]
     except Exception as e:
-        out["inspect_error"] = f"{type(e).__name__}: {e}"
-        return out
-
-    if "mobile" not in out["user_columns"]:
-        try:
-            with engine.begin() as conn:
-                conn.execute(text("ALTER TABLE users ADD COLUMN mobile VARCHAR(20)"))
-            out["migration"] = "added mobile column"
-        except Exception as e:
-            out["migration_error"] = f"{type(e).__name__}: {e}"
-    else:
-        out["migration"] = "mobile column already present"
+        out["error"] = f"{type(e).__name__}: {e}"
     return out
 
 
