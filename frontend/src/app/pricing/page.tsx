@@ -84,10 +84,16 @@ export default function PricingPage() {
                 label={isTrialActive ? 'Subscribe after trial (₹999/mo)' : 'Subscribe ₹999/month'}
               />
             ) : (
-              <Link href="/register"
-                className="block text-center py-3 rounded-lg font-semibold bg-primary-600 text-white hover:bg-primary-700">
-                Start 7-Day Free Trial
-              </Link>
+              <div className="space-y-3">
+                <Link href="/register?next=/pricing"
+                  className="block text-center py-3 rounded-lg font-semibold bg-primary-600 text-white hover:bg-primary-700">
+                  Start 7-Day Free Trial
+                </Link>
+                <Link href="/login?next=/pricing"
+                  className="block text-center py-3 rounded-lg font-semibold border border-primary-600 text-primary-700 hover:bg-primary-50">
+                  Sign in to subscribe
+                </Link>
+              </div>
             )
           )}
         </div>
