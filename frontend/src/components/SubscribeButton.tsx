@@ -18,17 +18,21 @@ interface Props {
 }
 
 export default function SubscribeButton({ label = 'Subscribe ₹999/month', className = '' }: Props) {
-  const { user, token, login, isPremium } = useAuth()
+  const { user, token, login, isPremium, isTrialActive } = useAuth()
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
+  // Trial users are "premium" for access purposes but should still be able to
+  // set up their paid subscription. Only block when they have a real paid plan.
+  const paidActive = isPremium && !isTrialActive
+
   const handleSubscribe = async () => {
     if (!token || !user) {
-      router.push('/register')
+      router.push('/register?next=/pricing')
       return
     }
-    if (isPremium) return
+    if (paidActive) return
 
     setLoading(true)
     setError('')
@@ -71,7 +75,7 @@ export default function SubscribeButton({ label = 'Subscribe ₹999/month', clas
     }
   }
 
-  if (isPremium) {
+  if (paidActive) {
     return (
       <span className={`inline-block text-center py-3 px-6 rounded-lg bg-green-100 text-green-800 font-semibold ${className}`}>
         Premium Active
