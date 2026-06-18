@@ -96,6 +96,11 @@ export default function PricingPage() {
               </div>
             )
           )}
+          <p className="text-xs text-gray-500 mt-4 leading-relaxed">
+            Setting up autopay requires a refundable ₹5 verification by Razorpay.
+            Your first ₹999 payment happens only after your 7-day free trial ends —
+            cancel anytime before then and you won&apos;t be charged.
+          </p>
         </div>
       </div>
 
