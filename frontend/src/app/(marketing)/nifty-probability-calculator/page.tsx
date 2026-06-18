@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import ProbabilityCalculator from '@/components/ProbabilityCalculator'
 import AdUnit from '@/components/AdUnit'
 import MonetizationSidebar from '@/components/MonetizationSidebar'
+import ToolGate from '@/components/ToolGate'
 
 export const metadata: Metadata = {
   title: 'NIFTY Probability Calculator',
@@ -22,7 +23,9 @@ export default function NiftyProbabilityPage() {
 
       <div className="grid lg:grid-cols-[1fr_280px] gap-8">
         <div>
-          <ProbabilityCalculator market="nifty" />
+          <ToolGate>
+            <ProbabilityCalculator market="nifty" />
+          </ToolGate>
 
           <div className="mt-12 p-6 bg-amber-50 border border-amber-200 rounded-xl">
             <h2 className="font-semibold text-lg mb-2">How It Works</h2>

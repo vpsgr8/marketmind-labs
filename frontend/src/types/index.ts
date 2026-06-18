@@ -2,6 +2,7 @@ export interface User {
   id: number
   name: string
   email: string
+  mobile?: string | null
   plan: string
   is_premium?: boolean
   is_trial_active?: boolean

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import ProbabilityCalculator from '@/components/ProbabilityCalculator'
 import AdUnit from '@/components/AdUnit'
+import ToolGate from '@/components/ToolGate'
 
 export const metadata: Metadata = {
   title: 'BANKNIFTY Probability Calculator',
@@ -19,7 +20,9 @@ export default function BankNiftyProbabilityPage() {
         </p>
       </div>
 
-      <ProbabilityCalculator market="banknifty" />
+      <ToolGate>
+        <ProbabilityCalculator market="banknifty" />
+      </ToolGate>
 
       <div className="mt-12 p-6 bg-blue-50 border border-blue-200 rounded-xl">
         <h2 className="font-semibold text-lg mb-2">Why BANKNIFTY Needs Separate Analysis</h2>

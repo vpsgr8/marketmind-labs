@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { api } from '@/lib/api'
 import type { CandleData, SupportResistanceResult } from '@/types'
+import ToolGate from '@/components/ToolGate'
 
 export default function SupportResistancePage() {
   const [candles, setCandles] = useState<CandleData[]>(
@@ -50,6 +51,7 @@ export default function SupportResistancePage() {
         </p>
       </div>
 
+      <ToolGate>
       <div className="grid md:grid-cols-2 gap-8">
         <div>
           <div className="grid grid-cols-5 gap-2 mb-2 text-xs font-medium text-gray-500">
@@ -102,6 +104,7 @@ export default function SupportResistancePage() {
           </div>
         )}
       </div>
+      </ToolGate>
     </div>
   )
 }

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { api } from '@/lib/api'
 import type { GannTimeResult } from '@/types'
+import ToolGate from '@/components/ToolGate'
 
 export default function GannTimeCyclePage() {
   const [highDate, setHighDate] = useState('')
@@ -38,6 +39,7 @@ export default function GannTimeCyclePage() {
         </p>
       </div>
 
+      <ToolGate>
       <div className="max-w-lg mx-auto mb-8 space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Swing High Date</label>
@@ -82,6 +84,7 @@ export default function GannTimeCyclePage() {
           </div>
         </div>
       )}
+      </ToolGate>
     </div>
   )
 }

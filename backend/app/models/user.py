@@ -17,6 +17,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(255), nullable=False)
     email = Column(String(255), unique=True, index=True, nullable=False)
+    mobile = Column(String(20), unique=True, index=True, nullable=True)
     password_hash = Column(String(255), nullable=True)
     google_id = Column(String(255), nullable=True, unique=True)
     plan = Column(SAEnum(PlanEnum), default=PlanEnum.GUEST, nullable=False)

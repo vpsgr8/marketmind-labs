@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import ProbabilityCalculator from '@/components/ProbabilityCalculator'
+import ToolGate from '@/components/ToolGate'
 
 export const metadata: Metadata = {
   title: 'SENSEX Probability Calculator',
@@ -17,7 +18,9 @@ export default function SensexProbabilityPage() {
         </p>
       </div>
 
-      <ProbabilityCalculator market="sensex" />
+      <ToolGate>
+        <ProbabilityCalculator market="sensex" />
+      </ToolGate>
     </div>
   )
 }

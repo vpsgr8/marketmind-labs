@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { api } from '@/lib/api'
 import type { CandleData } from '@/types'
+import ToolGate from '@/components/ToolGate'
 
 export default function SwishBreakoutPage() {
   const [candles, setCandles] = useState<CandleData[]>(
@@ -48,6 +49,7 @@ export default function SwishBreakoutPage() {
         </p>
       </div>
 
+      <ToolGate>
       <div className="flex gap-2 mb-6">
         <button onClick={() => setMode('analyze')} className={`px-4 py-2 rounded-lg text-sm font-medium ${mode === 'analyze' ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-600'}`}>Analyze</button>
         <button onClick={() => setMode('scan')} className={`px-4 py-2 rounded-lg text-sm font-medium ${mode === 'scan' ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-600'}`}>Scan</button>
@@ -84,6 +86,7 @@ export default function SwishBreakoutPage() {
           )}
         </div>
       )}
+      </ToolGate>
     </div>
   )
 }

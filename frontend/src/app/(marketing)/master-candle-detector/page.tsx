@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { api } from '@/lib/api'
 import type { CandleData, MasterCandleResult } from '@/types'
+import ToolGate from '@/components/ToolGate'
 
 export default function MasterCandlePage() {
   const [candles, setCandles] = useState<CandleData[]>([
@@ -50,6 +51,7 @@ export default function MasterCandlePage() {
         </p>
       </div>
 
+      <ToolGate>
       <div className="overflow-x-auto mb-6">
         <table className="w-full text-sm">
           <thead>
@@ -111,6 +113,7 @@ export default function MasterCandlePage() {
           </div>
         </div>
       )}
+      </ToolGate>
     </div>
   )
 }

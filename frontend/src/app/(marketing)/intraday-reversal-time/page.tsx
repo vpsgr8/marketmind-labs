@@ -3,8 +3,11 @@
 import { useState, useEffect } from 'react'
 import { api } from '@/lib/api'
 import type { ReversalTimeResult } from '@/types'
+import ToolGate from '@/components/ToolGate'
+import { useAuth } from '@/lib/auth'
 
 export default function IntradayReversalPage() {
+  const { isPremium } = useAuth()
   const [result, setResult] = useState<ReversalTimeResult | null>(null)
   const [times, setTimes] = useState<any>(null)
   const [error, setError] = useState('')
@@ -22,8 +25,8 @@ export default function IntradayReversalPage() {
   }
 
   useEffect(() => {
-    load()
-  }, [])
+    if (isPremium) load()
+  }, [isPremium])
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-12">
@@ -34,6 +37,7 @@ export default function IntradayReversalPage() {
         </p>
       </div>
 
+      <ToolGate>
       {loading && <p className="text-center text-gray-500 mb-6">Loading reversal times…</p>}
       {error && (
         <div className="text-center mb-8">
@@ -104,6 +108,7 @@ export default function IntradayReversalPage() {
           </div>
         </div>
       )}
+      </ToolGate>
     </div>
   )
 }

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { api } from '@/lib/api'
 import type { CandleData, DailyOutlookResult } from '@/types'
+import ToolGate from '@/components/ToolGate'
 
 export default function DailyOutlookPage() {
   const [candles, setCandles] = useState<CandleData[]>(
@@ -49,6 +50,7 @@ export default function DailyOutlookPage() {
         </p>
       </div>
 
+      <ToolGate>
       <div className="grid md:grid-cols-2 gap-8">
         <div>
           <div className="grid grid-cols-5 gap-2 mb-2 text-xs font-medium text-gray-500">
@@ -113,6 +115,7 @@ export default function DailyOutlookPage() {
           </div>
         )}
       </div>
+      </ToolGate>
     </div>
   )
 }

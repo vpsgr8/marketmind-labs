@@ -7,6 +7,7 @@ import type { GannSquareResult } from '@/types'
 import RelatedTools from '@/components/RelatedTools'
 import MonetizationSidebar from '@/components/MonetizationSidebar'
 import AdUnit from '@/components/AdUnit'
+import ToolGate from '@/components/ToolGate'
 
 export default function GannSquareOf9Calculator() {
   const [price, setPrice] = useState('')
@@ -44,6 +45,7 @@ export default function GannSquareOf9Calculator() {
 
       <div className="grid lg:grid-cols-[1fr_280px] gap-8">
         <div>
+          <ToolGate>
           <div className="max-w-md mx-auto mb-8">
             <label className="block text-sm font-medium text-gray-700 mb-2">Current Price</label>
             <div className="flex gap-2">
@@ -105,6 +107,7 @@ export default function GannSquareOf9Calculator() {
               </div>
             </div>
           )}
+          </ToolGate>
 
           <section className="mt-10 prose prose-sm max-w-none text-gray-600">
             <h2 className="text-lg font-semibold text-gray-900">What is GANN Square of 9?</h2>

@@ -44,9 +44,31 @@ app.include_router(alerts.router)
 app.include_router(payments.router)
 
 
+def _run_lightweight_migrations():
+    """Add columns that were introduced after the table was first created.
+
+    Base.metadata.create_all only creates missing tables, not new columns on
+    existing ones, so we add them idempotently here. Works on Postgres and SQLite.
+    """
+    from sqlalchemy import inspect, text
+
+    inspector = inspect(engine)
+    if "users" not in inspector.get_table_names():
+        return
+    columns = {col["name"] for col in inspector.get_columns("users")}
+    if "mobile" not in columns:
+        with engine.begin() as conn:
+            conn.execute(text("ALTER TABLE users ADD COLUMN mobile VARCHAR(20)"))
+
+
 @app.on_event("startup")
 def on_startup():
     Base.metadata.create_all(bind=engine)
+    try:
+        _run_lightweight_migrations()
+    except Exception:
+        # Never block startup on a best-effort migration.
+        pass
 
 
 @app.get("/")
