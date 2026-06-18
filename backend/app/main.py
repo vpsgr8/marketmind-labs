@@ -94,17 +94,6 @@ def on_startup():
         pass
 
 
-@app.exception_handler(Exception)
-async def _debug_exception_handler(request, exc):
-    # Temporary: surface real error details to diagnose 500s.
-    import traceback
-
-    return JSONResponse(
-        status_code=500,
-        content={"detail": f"{type(exc).__name__}: {exc}", "trace": traceback.format_exc()[-1500:]},
-    )
-
-
 @app.get("/")
 def root():
     return {
@@ -142,22 +131,6 @@ def export_pdf(data: PDFExportInput):
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"PDF generation failed: {str(e)}")
-
-
-@app.get("/api/debug/migrate")
-def debug_migrate():
-    """Temporary: apply lightweight column migrations and report schema."""
-    from sqlalchemy import inspect
-
-    out: dict = {}
-    try:
-        out["migration"] = _run_lightweight_migrations()
-        inspector = inspect(engine)
-        out["user_columns"] = [c["name"] for c in inspector.get_columns("users")]
-        out["subscription_columns"] = [c["name"] for c in inspector.get_columns("subscriptions")]
-    except Exception as e:
-        out["error"] = f"{type(e).__name__}: {e}"
-    return out
 
 
 @app.get("/api/ads/config")
