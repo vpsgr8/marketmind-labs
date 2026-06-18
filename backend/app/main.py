@@ -110,6 +110,32 @@ def export_pdf(data: PDFExportInput):
         raise HTTPException(status_code=500, detail=f"PDF generation failed: {str(e)}")
 
 
+@app.get("/api/debug/migrate")
+def debug_migrate():
+    """Temporary: inspect users table and add the mobile column if missing."""
+    from sqlalchemy import inspect, text
+
+    out: dict = {}
+    try:
+        inspector = inspect(engine)
+        out["tables"] = inspector.get_table_names()
+        out["user_columns"] = [c["name"] for c in inspector.get_columns("users")]
+    except Exception as e:
+        out["inspect_error"] = f"{type(e).__name__}: {e}"
+        return out
+
+    if "mobile" not in out["user_columns"]:
+        try:
+            with engine.begin() as conn:
+                conn.execute(text("ALTER TABLE users ADD COLUMN mobile VARCHAR(20)"))
+            out["migration"] = "added mobile column"
+        except Exception as e:
+            out["migration_error"] = f"{type(e).__name__}: {e}"
+    else:
+        out["migration"] = "mobile column already present"
+    return out
+
+
 @app.get("/api/ads/config")
 def ad_config():
     return {
