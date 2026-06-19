@@ -8,7 +8,7 @@ import { useAuth } from '@/lib/auth'
 
 const STORAGE_KEY = 'consultation_contact'
 const WHATSAPP_MSG = encodeURIComponent(
-  "Hi! I've paid for the ₹3999 one-time LogicTrade consultation. I'd like to book my 1-on-1 session.",
+  "Hi! I've paid the ₹3999 one-time fee. I'd like to understand the complete usage and strength of the LogicTrade calculators and tools.",
 )
 
 type Contact = { whatsapp: string; whatsapp_link: string; email: string }
@@ -46,7 +46,7 @@ export default function ConsultationOffer() {
         currency: order.currency,
         order_id: order.order_id,
         name: 'LogicTrade / MarketMind Labs',
-        description: '1-on-1 Consultation — one-time access',
+        description: 'Tool walkthrough — one-time access',
         prefill: user ? { name: user.name, email: user.email } : undefined,
         theme: { color: '#2563eb' },
         handler: async (resp: {
@@ -90,21 +90,24 @@ export default function ConsultationOffer() {
         <div className="flex flex-col lg:flex-row items-center justify-between gap-6 text-center lg:text-left">
           <div className="max-w-2xl">
             <span className="inline-block bg-yellow-300 text-gray-900 text-xs font-bold px-3 py-1 rounded-full mb-3">
-              LIMITED 1-ON-1 SLOTS
+              1-ON-1 TOOL WALKTHROUGH
             </span>
             <h3 className="text-white text-xl lg:text-2xl font-bold mb-2">
-              Want to truly master these tools? Let me teach you personally.
+              Understand the complete strength &amp; usage of every tool
             </h3>
             <p className="text-primary-100 text-sm lg:text-base">
-              Book a private 1-on-1 session and I&apos;ll walk you through the exact setups, pro tips,
-              hidden tricks, and time-saving cheats to read NIFTY, BANKNIFTY &amp; SENSEX like a pro —
-              so you stop guessing and start trading with confidence.
+              Want to know the complete strength and correct usage of all the calculators and tools
+              built for the Indian trade market — along with a few additional benefits? Connect with us
+              for a one-time personal walkthrough that explains each tool in detail.
             </p>
             <p className="text-white font-semibold mt-3">
               One-time fee — just <span className="text-yellow-300 text-lg">₹3,999</span>{' '}
-              <span className="text-primary-200 font-normal text-sm">
-                (no subscription, lifetime know-how)
-              </span>
+              <span className="text-primary-200 font-normal text-sm">(no subscription)</span>
+            </p>
+            <p className="text-primary-200/90 text-xs mt-3 leading-relaxed">
+              Disclaimer: We are not SEBI-registered and we do not sell any courses. The entire
+              discussion is limited strictly to the calculators and tools provided on this website and
+              is not investment, trading, or financial advice.
             </p>
           </div>
 
