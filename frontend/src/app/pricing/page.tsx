@@ -108,6 +108,11 @@ export default function PricingPage() {
         Payments processed securely by Razorpay. UPI, cards, and net banking accepted.
         By subscribing you agree to recurring monthly billing after your trial period.
       </p>
+      <p className="text-center text-xs text-gray-400 mt-3 max-w-lg mx-auto">
+        Disclaimer: We are not SEBI-registered and do not sell any courses or provide investment, trading,
+        or financial advice. Access is to the calculators and tools on this website, provided for
+        informational and educational purposes only.
+      </p>
     </div>
   )
 }

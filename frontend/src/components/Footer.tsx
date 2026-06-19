@@ -76,7 +76,11 @@ export default function Footer() {
             Keywords: NIFTY probability calculator, BANKNIFTY options, GANN square of 9, master candle, swish breakout,
             intraday reversal time, support resistance, daily outlook, SENSEX analysis
           </p>
-          <p>Disclaimer: Educational information only. Not investment advice. Trading involves risk.</p>
+          <p>
+            Disclaimer: Educational and informational use only. We are not SEBI-registered and do not sell
+            any courses or provide investment, trading, or financial advice. All calculators and tools are
+            for informational purposes only — trading involves risk.
+          </p>
           <p>&copy; {new Date().getFullYear()} LogicTrade / MarketMind Labs. All rights reserved.</p>
         </div>
       </div>
