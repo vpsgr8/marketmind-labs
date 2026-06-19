@@ -21,7 +21,15 @@ export default function PrivacyPage() {
 
       <h2>Payments (Razorpay)</h2>
       <p>
-        Subscription payments are processed by Razorpay. We do not store your full card or UPI details — Razorpay handles payment data securely.
+        Subscription payments and the optional one-time tool walkthrough fee are processed by Razorpay.
+        We do not store your full card or UPI details — Razorpay handles payment data securely.
+      </p>
+
+      <h2>Disclaimer</h2>
+      <p>
+        We are not SEBI-registered and do not sell any courses or provide investment, trading, or
+        financial advice. All calculators and tools on this website, including any paid walkthrough, are
+        for informational and educational purposes only.
       </p>
 
       <h2>Contact</h2>
